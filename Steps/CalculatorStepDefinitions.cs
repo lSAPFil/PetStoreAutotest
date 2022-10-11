@@ -8,24 +8,25 @@ namespace SpecFlowProject_PetStore.Steps
     [Binding]
     public sealed class CalculatorStepDefinitions
     {
-        
-        class Calculator
+
+        public class Calculator
         {
             // Объявляем список для хранения вводимых чисел 
-            public List<int> numbersForAdd = new List<int>();
+            public List<int> numbersForAdd = new();
             public int result;
-
             public void Addition(List<int> numbers)
             {
                 // Сложение введенных чисел
-                foreach(int i in numbers)
+                foreach (int i in numbers)
                 {
                     result += i;
                 }
+
+                Console.WriteLine($"Ответ: {result}");
             }
         }
 
-        private readonly Calculator _calculator = new Calculator();
+        public Calculator _calculator = new();
 
         [Given(@"Число для операции сложения равно (.*)")]
         public void GivenIHaveEnteredIntoTheCalculator(int number)
@@ -34,12 +35,11 @@ namespace SpecFlowProject_PetStore.Steps
             _calculator.numbersForAdd.Add(number);
         }
 
-        [When(@"Сложить все числа")]
+        [Given(@"Сложить все числа")]
         public void WhenIPressAdd()
         {
             // Сложение вводимых чисел
             _calculator.Addition(_calculator.numbersForAdd);
         }
-
     }
 }
