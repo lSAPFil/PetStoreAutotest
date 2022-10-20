@@ -74,14 +74,14 @@ namespace SpecFlowProject_PetStore.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Сложение вводимых чисел")]
-        [NUnit.Framework.CategoryAttribute("mytag")]
-        public virtual void СложениеВводимыхЧисел()
+        [NUnit.Framework.DescriptionAttribute("Сложение_Вводимых_Чисел")]
+        [NUnit.Framework.CategoryAttribute("firstAutotest")]
+        public virtual void Сложение_Вводимых_Чисел()
         {
             string[] tagsOfScenario = new string[] {
-                    "mytag"};
+                    "firstAutotest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сложение вводимых чисел", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Сложение_Вводимых_Чисел", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -104,12 +104,6 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 7
  testRunner.And("Число для операции сложения равно 5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
-#line hidden
-#line 8
- testRunner.And("Число для операции сложения равно 9", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
-#line hidden
-#line 9
- testRunner.And("Сложить все числа", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
             this.ScenarioCleanup();

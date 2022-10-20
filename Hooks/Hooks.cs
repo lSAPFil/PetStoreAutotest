@@ -19,13 +19,13 @@ namespace SpecFlowProject_PetStore
         [Before]
         public static void BeforeScenario()
         {
-            Console.WriteLine("Запуск калькулятора чисел");
+            Console.WriteLine("Запуск сценария");
         }
 
         [After]
-        public void AfterScenario()
+        public static void AfterScenario()
         {
-            Console.WriteLine($"Подсчет чисел окончен");
+            Console.WriteLine("Тест завершился "+ DateTime.Now.ToString());
         }
     }
 }

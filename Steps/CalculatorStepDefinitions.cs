@@ -41,5 +41,8 @@ namespace SpecFlowProject_PetStore.Steps
             // Сложение вводимых чисел
             _calculator.Addition(_calculator.numbersForAdd);
         }
+
+       
+
     }
 }
