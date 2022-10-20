@@ -53,16 +53,10 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
                 writer.Write(json);
             }
 
-            // Получаем ответ от сервера(нужно будет придумать нормальную проверку)
+            // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+            
             // Получаем поток для чтения ответа сервера
             using (var responseStream = httpResponse.GetResponseStream())
 
@@ -96,16 +90,10 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             httpRequest.Method = "DELETE";
 
+            // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
-
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+           
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -131,16 +119,10 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             httpRequest.Method = "GET";
 
+            // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
-
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+            
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -156,16 +138,10 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             httpRequest.Method = "GET";
 
+            // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
-
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+            
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -218,15 +194,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
-
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+           
             // Получаем поток для чтения ответа сервера
             using (var responseStream = httpResponse.GetResponseStream())
 
@@ -253,16 +222,10 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             httpRequest.Method = "GET";
 
+            // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            try
-            {
-                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            }
-            catch (WebException ex)
-            {
-                httpResponse = ex.Response as HttpWebResponse;
-            }
-
+            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+            
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
