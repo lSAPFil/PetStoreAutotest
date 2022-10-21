@@ -26,6 +26,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
         public string url = "https://petstore.swagger.io/v2";
 
+        public HttpWebResponse httpResponse;
+
         PetsInfo petInfo = new()
         {
             Id = 2,
@@ -36,98 +38,41 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             Status = RandomString(random.Next(10))
         };
 
+        public void CheckActionResult(string happyMessage, string badMessage, int httpCodeType, int waitingHttpCodeType)
+        {
+            // Проверка, что данные добавлены успешно
+            if (httpCodeType == waitingHttpCodeType)
+            {
+                Console.WriteLine(happyMessage);
+            }
+            else
+            {
+                throw new Exception($" {badMessage} {httpCodeType}");
+            }
+        }
+
         public void AddPetID(int petId)
         {
             petInfo.Id = petId;
 
-            // Объявление адреса для отправки данных
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet");
-
-            httpRequest.Method = "POST";
-
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
 
-            // Задаем type данных для отправки
-            httpRequest.ContentType = "application/json";
+            DeclareRequestSettings("/pet", "POST", json);
 
-            // Получаем поток для отправки данных на сервер
-            using (var requestStream = httpRequest.GetRequestStream())
-
-            // Отправляем данные на сервер
-            using (var writer = new StreamWriter(requestStream))
-            {
-                writer.Write(json);
-            }
-
-            // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            
-            // Получаем поток для чтения ответа сервера
-            using (var responseStream = httpResponse.GetResponseStream())
-
-            // Читаем ответ сервера 
-            using (var reader = new StreamReader(responseStream))
-            {
-                var response = reader.ReadToEnd();
-
-                // Вывод ответа сервера
-                Console.WriteLine(response);
-
-                // Вывод полученного кода статуса
-                Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
-            }
-
-            // Проверка, что данные добавлены успешно
-            if (FindPetInfo(Convert.ToInt32(petInfo.Id)) == 200)
-            {
-                Console.WriteLine("Питомец был успешно добавлен");
-            }
-            else
-            {
-                throw new Exception($"Добавление питомца завершилось ошибкой {FindPetInfo(Convert.ToInt32(petInfo.Id))}");
-            }
+            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой", FindPetInfo(Convert.ToInt32(petInfo.Id)), 200);
         }
 
         public void DeletePetInfo(int petId)
         {
-            // Объявление адреса для отправки данных
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet/" + petId);
 
-            httpRequest.Method = "DELETE";
+            DeclareRequestSettings("/pet/" + petId, "DELETE");
 
-            // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
-
-            // Проверка, что данные удалены успешно
-            if (FindPetInfo(petId) == 404)
-            {
-                Console.WriteLine("Удаление прошло успешно");
-            }
-            else
-            {
-                throw new Exception("Данные о питомце не были удалены");
-            }
+            CheckActionResult("Удаление прошло успешно", "Данные о питомце не были удалены", FindPetInfo(petId), 404);
         }
 
-        public int FindPetInfo(int petId)
+        public void GetHttpResponse(HttpWebRequest httpRequest)
         {
-            // Объявление адреса для отправки данных
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet/" + petId);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
             try
             {
                 httpResponse = httpRequest.GetResponse() as HttpWebResponse;
@@ -136,6 +81,36 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             {
                 httpResponse = ex.Response as HttpWebResponse;
             }
+        }
+
+        public void DeclareRequestSettings(string endPoint, string methodName)
+        {
+            Uri uri = new Uri(url + endPoint);
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            httpRequest.Method = methodName;
+
+            GetHttpResponse(httpRequest);
+
+            // Получаем ответ от сервера
+            using var webStream = httpResponse.GetResponseStream();
+
+            using var reader = new StreamReader(webStream);
+            var data = reader.ReadToEnd();
+
+            Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
+        }
+
+        public int FindPetInfo(int petId)
+        {
+            Uri uri = new Uri(url + "/pet/" + petId);
+            // Объявление адреса для отправки данных
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            httpRequest.Method = "GET";
+
+            // Получаем ответ от сервера
+            GetHttpResponse(httpRequest);
 
             using var webStream = httpResponse.GetResponseStream();
 
@@ -147,15 +122,15 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
         public int FindPetInfo(string json, int petId)
         {
+            Uri uri = new Uri(url + "/pet/" + petId);
             // Объявление реквеста. Эндпоинт /user
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet/" + petId);
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpRequest.Method = "GET";
 
             // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            
+            GetHttpResponse(httpRequest);
+
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -173,25 +148,13 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             return (int)httpResponse.StatusCode;
         }
 
-        public void UpdatePetInfo(int petId)
+        public void DeclareRequestSettings(string endPoint, string methodName, string json)
         {
-            petInfo = new()
-            {
-                Id = petId,
-                Category = new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) },
-                Name = RandomString(random.Next(10)),
-                PhotoUrls = new List<string>() { RandomString(random.Next(10)) },
-                Tags = new List<Category>() { new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) } },
-                Status = RandomString(random.Next(10))
-            };
+            Uri uri = new Uri(url + endPoint);
+            // Объявление реквеста. Эндпоинт
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
 
-            // Объявление реквеста. Эндпоинт /user
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet");
-
-            httpRequest.Method = "PUT";
-
-            // Конвертирование данных пользователя в JSON для отправки на POST
-            var json = JsonConvert.SerializeObject(petInfo);
+            httpRequest.Method = methodName;
 
             // Задаем type данных для отправки
             httpRequest.ContentType = "application/json";
@@ -206,9 +169,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             }
 
             // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-           
+            GetHttpResponse(httpRequest);
+
             // Получаем поток для чтения ответа сервера
             using (var responseStream = httpResponse.GetResponseStream())
 
@@ -223,6 +185,16 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
                 // Вывод полученного кода статуса
                 Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
             }
+        }
+
+        public void UpdatePetInfo(int petId)
+        {
+            petInfo.Id = petId;
+
+            // Конвертирование данных пользователя в JSON для отправки на POST
+            var json = JsonConvert.SerializeObject(petInfo);
+
+            DeclareRequestSettings("/pet", "PUT", json);
 
             // Проверка, что данные обновлены успешно
             FindPetInfo(json, petId);
@@ -230,21 +202,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
         public void FindByStatus(string status)
         {
-            // Объявление реквеста. Эндпоинт /user
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet/findByStatus?status=" + status);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
+            // Объявление реквеста
+            DeclareRequestSettings("/pet/findByStatus?status=" + status, "GET");
         }
     }
 }
