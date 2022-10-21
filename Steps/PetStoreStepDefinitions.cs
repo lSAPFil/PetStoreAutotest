@@ -10,10 +10,10 @@ namespace SpecFlowProject_PetStore.Steps
     {
         public Pet pet = new();
 
-        [Given(@"Добавить питомца")]
-        public void StepAddPetID()
+        [Given(@"Добавить питомца с PetId (.*)")]
+        public void StepAddPetID(int petId)
         {
-            pet.AddPetID();
+            pet.AddPetID(petId);
         }
 
         [Given(@"Обновить данные питомца с PetId (.*)")]

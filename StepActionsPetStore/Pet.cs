@@ -15,23 +15,31 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
     public sealed class Pet
     {
-        // Нужно в вводимых данных для создания питомца использовать тот метод который мы юзаем на работе (comments+numbers+..+..)
-        // Под это требуется отдельный метод вне Pet 
+        private static Random random = new Random();
+
+        public static string RandomString(int length)
+        {
+            const string chars = "[]:;<>,./?|!@#$%^&*()_+=-qqwertyuiopasdfghjklzxcvbnmйцукенгшщзхъфывапролджэячсмитьбю0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
 
         public string url = "https://petstore.swagger.io/v2";
 
         PetsInfo petInfo = new()
         {
             Id = 2,
-            Category = new Category { Id = 1, Name = "Ruta1" },
-            Name = "doggie",
-            PhotoUrls = new List<string>() { "Photo_of_Ruta1.png" },
-            Tags = new List<Category>() { new Category { Id = 1, Name = "Ruta_is_cool1" } },
-            Status = "available"
+            Category = new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) },
+            Name = RandomString(random.Next(10)),
+            PhotoUrls = new List<string>() { RandomString(random.Next(10)) },
+            Tags = new List<Category>() { new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) } },
+            Status = RandomString(random.Next(10))
         };
 
-        public void AddPetID()
+        public void AddPetID(int petId)
         {
+            petInfo.Id = petId;
+
             // Объявление адреса для отправки данных
             var httpRequest = (HttpWebRequest)WebRequest.Create(url + "/pet");
 
@@ -39,7 +47,6 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
-            Console.WriteLine(json);
 
             // Задаем type данных для отправки
             httpRequest.ContentType = "application/json";
@@ -93,7 +100,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             // Получаем ответ от сервера
             HttpWebResponse httpResponse;
             httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-           
+
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -121,8 +128,15 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             // Получаем ответ от сервера
             HttpWebResponse httpResponse;
-            httpResponse = httpRequest.GetResponse() as HttpWebResponse;
-            
+            try
+            {
+                httpResponse = httpRequest.GetResponse() as HttpWebResponse;
+            }
+            catch (WebException ex)
+            {
+                httpResponse = ex.Response as HttpWebResponse;
+            }
+
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
@@ -164,11 +178,11 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             petInfo = new()
             {
                 Id = petId,
-                Category = new Category { Id = 1, Name = "das" },
-                Name = "asdas1d",
-                PhotoUrls = new List<string>() { "Phssoto_of_Ruta.png" },
-                Tags = new List<Category>() { new Category { Id = 1, Name = "Ruta_is_cool111" } },
-                Status = "available"
+                Category = new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) },
+                Name = RandomString(random.Next(10)),
+                PhotoUrls = new List<string>() { RandomString(random.Next(10)) },
+                Tags = new List<Category>() { new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) } },
+                Status = RandomString(random.Next(10))
             };
 
             // Объявление реквеста. Эндпоинт /user
@@ -178,7 +192,6 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
-            Console.WriteLine(json);
 
             // Задаем type данных для отправки
             httpRequest.ContentType = "application/json";
