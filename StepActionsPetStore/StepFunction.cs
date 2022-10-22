@@ -5,7 +5,6 @@ using System.Net;
 using Newtonsoft.Json;
 
 using static SpecFlowProject_PetStore.StepActionsPetStore.CheckInfo;
-using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
@@ -13,24 +12,24 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
     {
         PetsInfo petInfo = new()
         {
-            id = 2,
-            category = new Category { id = random.Next(10), name = RandomString(random.Next(10)) },
-            name = RandomString(random.Next(10)),
-            photoUrls = new List<string>() { RandomString(random.Next(10)) },
-            tags = new List<Category>() { new Category { id = random.Next(10), name = RandomString(random.Next(10)) } },
-            status = RandomString(random.Next(10))
+            Id = 2,
+            Category = new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) },
+            Name = RandomString(random.Next(10)),
+            PhotoUrls = new List<string>() { RandomString(random.Next(10)) },
+            Tags = new List<Category>() { new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) } },
+            Status = RandomString(random.Next(10))
         };
 
         public void AddPetID(int petId)
         {
-            petInfo.id = petId;
+            petInfo.Id = petId;
 
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
 
             DeclareRequestSettings("/pet", "POST", json);
 
-            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой", CheckInfo.FindPetInfo(Convert.ToInt32(petInfo.id)), 200);
+            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой", CheckInfo.FindPetInfo(Convert.ToInt32(petInfo.Id)), 200);
         }
 
         public void DeletePetInfo(int petId)
@@ -43,7 +42,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
         public void UpdatePetInfo(int petId)
         {
-            petInfo.id = petId;
+            petInfo.Id = petId;
 
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
