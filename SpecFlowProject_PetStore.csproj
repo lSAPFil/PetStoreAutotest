@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\PetStore_Позитивный - Копировать.feature.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ApiService.Consumer" Version="1.0.4" />
     <PackageReference Include="Gherkin" Version="24.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
@@ -22,13 +26,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Features\PetStore.feature.cs">
-      <DependentUpon>PetStore.feature</DependentUpon>
+    <Compile Update="Features\PetStore_Негативный.feature.cs">
+      <DependentUpon>PetStore_Негативный.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\PetStore_Позитивный.feature.cs">
+      <DependentUpon>PetStore_Позитивный.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\PetStore.feature">
+    <SpecFlowFeatureFiles Update="Features\PetStore_Негативный.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\PetStore_Позитивный.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

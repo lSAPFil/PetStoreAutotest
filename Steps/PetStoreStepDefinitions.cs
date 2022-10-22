@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using SpecFlowProject_PetStore.StepActionsPetStore;
+using static SpecFlowProject_PetStore.StepActionsPetStore.CheckInfo;
+using static SpecFlowProject_PetStore.StepActionsPetStore.StepFunction;
 namespace SpecFlowProject_PetStore.Steps
 {
     [Binding]
     public sealed class PetStoreStepDefinitions
     {
-        public Pet pet = new();
+        public StepFunction pet = new();
 
         [Given(@"Добавить питомца с PetId (.*)")]
         public void StepAddPetID(int petId)
@@ -32,6 +34,20 @@ namespace SpecFlowProject_PetStore.Steps
         public void StepFindByStatus(string status)
         {
             pet.FindByStatus(status);
+        }
+
+        [Given(@"Найти питомца по id (.*)")]
+        public void StepFindById(int id)
+        {
+
+            if (FindPetInfo(id) == 200)
+            {
+                throw new Exception("Данный питомец существует!");
+            }
+            else
+            {
+                Console.WriteLine($"Несуществующий питомец не был найден\n Код статуса: {FindPetInfo(id)}");
+            }
         }
     }
 }
