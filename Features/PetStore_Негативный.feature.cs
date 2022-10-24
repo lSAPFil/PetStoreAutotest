@@ -119,12 +119,12 @@ namespace SpecFlowProject_PetStore.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Найти_Питомца_По_Неизвестному_Статусу")]
-        [NUnit.Framework.CategoryAttribute("all")]
+        [NUnit.Framework.CategoryAttribute("any")]
         [NUnit.Framework.CategoryAttribute("id221022505")]
         public virtual void Найти_Питомца_По_Неизвестному_Статусу()
         {
             string[] tagsOfScenario = new string[] {
-                    "all",
+                    "any",
                     "id221022505"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Найти_Питомца_По_Неизвестному_Статусу", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
