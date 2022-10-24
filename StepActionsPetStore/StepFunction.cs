@@ -5,6 +5,7 @@ using System.Net;
 using Newtonsoft.Json;
 
 using static SpecFlowProject_PetStore.StepActionsPetStore.CheckInfo;
+using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
