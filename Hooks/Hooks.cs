@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using SpecFlowProject_PetStore.Steps;
+using NUnit.Framework;
 
 namespace SpecFlowProject_PetStore
 {
@@ -19,7 +20,7 @@ namespace SpecFlowProject_PetStore
         [Before]
         public static void BeforeScenario()
         {
-            Console.WriteLine("Запуск сценария");
+            Console.WriteLine("Запуск сценария: " + TestContext.CurrentContext.Test.Name);
         }
 
         [After]

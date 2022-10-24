@@ -3,6 +3,8 @@ using System.Linq;
 using System.IO;
 using System.Net;
 using System.Web;
+using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
+using NUnit.Framework;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
@@ -13,6 +15,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         public static Random random = new Random();
 
         public static HttpWebResponse httpResponse;
+
+        //public LogWriter log = new LogWriter;
 
         public static string RandomString(int length)
         {
@@ -27,10 +31,12 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             if (httpCodeType == waitingHttpCodeType)
             {
                 Console.WriteLine(happyMessage);
+                LogWrite("Запуск сценария: "+ TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + happyMessage + "\nКод статуса: " + httpCodeType);
             }
             else
             {
                 throw new Exception($" {badMessage} {httpCodeType}");
+                LogWrite("Запуск сценария: " + TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + badMessage + "\nКод статуса: "+ httpCodeType);
             }
         }
 
