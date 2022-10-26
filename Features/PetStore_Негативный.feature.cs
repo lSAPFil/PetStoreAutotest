@@ -75,11 +75,13 @@ namespace SpecFlowProject_PetStore.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Найти_Несуществующего_Питомца")]
+        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("all")]
         [NUnit.Framework.CategoryAttribute("id221022457")]
         public virtual void Найти_Несуществующего_Питомца()
         {
             string[] tagsOfScenario = new string[] {
+                    "negative",
                     "all",
                     "id221022457"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -119,12 +121,12 @@ namespace SpecFlowProject_PetStore.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Найти_Питомца_По_Неизвестному_Статусу")]
-        [NUnit.Framework.CategoryAttribute("any")]
+        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("id221022505")]
         public virtual void Найти_Питомца_По_Неизвестному_Статусу()
         {
             string[] tagsOfScenario = new string[] {
-                    "any",
+                    "negative",
                     "id221022505"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Найти_Питомца_По_Неизвестному_Статусу", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
@@ -150,6 +152,90 @@ namespace SpecFlowProject_PetStore.Features
                 this.ScenarioStart();
 #line 13
   testRunner.And("Найти питомца по статусу noname", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Удалить_Данные_О_Питомце_Без_ID")]
+        [NUnit.Framework.CategoryAttribute("negative")]
+        [NUnit.Framework.CategoryAttribute("id2510220233")]
+        public virtual void Удалить_Данные_О_Питомце_Без_ID()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "negative",
+                    "id2510220233"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Удалить_Данные_О_Питомце_Без_ID", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 16
+ this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 18
+  testRunner.And("Удалить данные питомца без PetId", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Обновить_Данные_О_Неизвестном_Питомце")]
+        [NUnit.Framework.CategoryAttribute("negative")]
+        [NUnit.Framework.CategoryAttribute("all")]
+        [NUnit.Framework.CategoryAttribute("id211022234")]
+        public virtual void Обновить_Данные_О_Неизвестном_Питомце()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "negative",
+                    "all",
+                    "id211022234"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Обновить_Данные_О_Неизвестном_Питомце", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 21
+ this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 23
+  testRunner.And("Найти питомца по PetId 2 и создать нового в случае неудачи", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
+#line 25
+  testRunner.And("Удалить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
+#line 27
+  testRunner.And("Обновить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
             this.ScenarioCleanup();

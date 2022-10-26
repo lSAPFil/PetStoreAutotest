@@ -3,43 +3,56 @@ using System.Linq;
 using System.IO;
 using System.Net;
 using System.Web;
-using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 using NUnit.Framework;
+
+// Класс для логирования результатов теста в файл
+using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
     public class CheckInfo
     {
+        // адрес сервиса PetStore
         public static string url = "https://petstore.swagger.io/v2";
 
         public static Random random = new Random();
 
         public static HttpWebResponse httpResponse;
 
-        //public LogWriter log = new LogWriter;
-
+        // Генерация случайных значений для отправки в сервис
         public static string RandomString(int length)
         {
-            const string chars = "[]:;<>,./?|!@#$%^&*()_+=-qqwertyuiopasdfghjklzxcvbnmйцукенгшщзхъфывапролджэячсмитьбю0123456789";
+            const string chars = "[]:;<>,./?|!@#$%^&*()_+=-"+
+                "qwertyuiopasdfghjklzxcvbnm"+
+                "QWERTYUIOPASDFGHJKLZXCVBNM"+
+                "йцукенгшщзхъфывапролджэячсмитьбю"+
+                "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"+
+                "0123456789" +
+                "  ~       ";
+
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static void CheckActionResult(string happyMessage, string badMessage, int httpCodeType, int waitingHttpCodeType)
+        // Вывод итога пройденного теста
+        public static void CheckActionResult(string happyMessage, string badMessage, int? httpCodeType, int? waitingHttpCodeType)
         {
             // Проверка, что данные добавлены успешно
             if (httpCodeType == waitingHttpCodeType)
             {
                 Console.WriteLine(happyMessage);
-                LogWrite("Запуск сценария: "+ TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + happyMessage + "\nКод статуса: " + httpCodeType);
+                LogWrite("Запуск сценария: "+ TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + 
+                    happyMessage + "\nКод статуса: " + httpCodeType);
             }
             else
             {
                 throw new Exception($" {badMessage} {httpCodeType}");
-                LogWrite("Запуск сценария: " + TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + badMessage + "\nКод статуса: "+ httpCodeType);
+                LogWrite("Запуск сценария: " + TestContext.CurrentContext.Test.Name.ToString() + "\nИтог шага: " + 
+                    badMessage + "\nКод статуса: "+ httpCodeType);
             }
         }
 
+        // Получение ответа сервера
         public static void GetHttpResponse(HttpWebRequest httpRequest)
         {
             try
@@ -52,6 +65,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             }
         }
 
+        // Отправка запроса с пользовательскими параметрами
         public static int DeclareRequestSettings(string endPoint, string methodName)
         {
             Uri uri = new Uri(url + endPoint);
@@ -59,38 +73,21 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             httpRequest.Method = methodName;
 
-            GetHttpResponse(httpRequest);
-
             // Получаем ответ от сервера
+            GetHttpResponse(httpRequest);
+            
             using var webStream = httpResponse.GetResponseStream();
 
             using var reader = new StreamReader(webStream);
             var data = reader.ReadToEnd();
 
+            Console.WriteLine(data);
             Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
 
             return (int)httpResponse.StatusCode;
         }
 
-        public static int FindPetInfo(int petId)
-        {
-            Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление адреса для отправки данных
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            return (int)httpResponse.StatusCode;
-        }
-
+        // Отправка запроса с пользовательскими данными в json формате
         public static void DeclareRequestSettings(string endPoint, string methodName, string json)
         {
             Uri uri = new Uri(url + endPoint);
@@ -128,6 +125,26 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
                 // Вывод полученного кода статуса
                 Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
             }
+        }
+
+        // Получение информации о найденном питомце (код ответа)
+        public static int FindPetInfo(int? petId)
+        {
+            Uri uri = new Uri(url + "/pet/" + petId);
+            // Объявление адреса для отправки данных
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            httpRequest.Method = "GET";
+
+            // Получаем ответ от сервера
+            GetHttpResponse(httpRequest);
+
+            using var webStream = httpResponse.GetResponseStream();
+
+            using var reader = new StreamReader(webStream);
+            var data = reader.ReadToEnd();
+
+            return (int)httpResponse.StatusCode;
         }
     }
 }

@@ -16,12 +16,37 @@ namespace SpecFlowProject_PetStore.Steps
         public void StepAddPetID(int petId)
         {
             pet.AddPetID(petId);
+        } 
+        
+        [Given(@"Добавить питомца ")]
+        public void StepAddPetIDAndHeaders(int petId)
+        {
+            pet.AddPetID(petId);
+        }
+
+        [Given(@"Найти питомца по PetId (.*) и создать нового в случае неудачи")]
+        public void StepFindPetById(int petId)
+        {
+            if (FindPetInfo(petId) != 200)
+            {
+                StepAddPetID(petId);
+            }
+            else
+            {
+                Console.WriteLine($"Питомец с PetId {petId} существует!");
+            }
         }
 
         [Given(@"Обновить данные питомца с PetId (.*)")]
         public void StepUpdatePetInfo(int petId)
         {
             pet.UpdatePetInfo(petId);
+        }
+
+        [Given(@"Удалить данные питомца без PetId")]
+        public void StepDeleteWithoutID()
+        {
+            pet.DeletePetInfo(null);
         }
 
         [Given(@"Удалить данные питомца с PetId (.*)")]

@@ -8,7 +8,6 @@ namespace SpecFlowProject_PetStore.Steps
     [Binding]
     public sealed class CalculatorStepDefinitions
     {
-
         public class Calculator
         {
             // Объявляем список для хранения вводимых чисел 
@@ -41,8 +40,5 @@ namespace SpecFlowProject_PetStore.Steps
             // Сложение вводимых чисел
             _calculator.Addition(_calculator.numbersForAdd);
         }
-
-       
-
     }
 }
