@@ -75,14 +75,14 @@ namespace SpecFlowProject_PetStore.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Найти_Несуществующего_Питомца")]
-        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("all")]
+        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("id221022457")]
         public virtual void Найти_Несуществующего_Питомца()
         {
             string[] tagsOfScenario = new string[] {
-                    "negative",
                     "all",
+                    "negative",
                     "id221022457"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Найти_Несуществующего_Питомца", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
@@ -197,14 +197,14 @@ namespace SpecFlowProject_PetStore.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Обновить_Данные_О_Неизвестном_Питомце")]
-        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("all")]
+        [NUnit.Framework.CategoryAttribute("negative")]
         [NUnit.Framework.CategoryAttribute("id211022234")]
         public virtual void Обновить_Данные_О_Неизвестном_Питомце()
         {
             string[] tagsOfScenario = new string[] {
-                    "negative",
                     "all",
+                    "negative",
                     "id211022234"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Обновить_Данные_О_Неизвестном_Питомце", null, tagsOfScenario, argumentsOfScenario, this._featureTags);

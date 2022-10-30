@@ -55,6 +55,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         // Получение ответа сервера
         public static void GetHttpResponse(HttpWebRequest httpRequest)
         {
+            // Избавляемся от остановки программы из-за негативного кода ответа
             try
             {
                 httpResponse = httpRequest.GetResponse() as HttpWebResponse;
@@ -69,6 +70,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         public static int DeclareRequestSettings(string endPoint, string methodName)
         {
             Uri uri = new Uri(url + endPoint);
+            // Объявление адреса для реквест запроса
             var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpRequest.Method = methodName;
@@ -91,7 +93,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         public static void DeclareRequestSettings(string endPoint, string methodName, string json)
         {
             Uri uri = new Uri(url + endPoint);
-            // Объявление реквеста. Эндпоинт
+            // Объявление адреса для реквест запроса
             var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpRequest.Method = methodName;
@@ -131,7 +133,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         public static int FindPetInfo(int? petId)
         {
             Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление адреса для отправки данных
+            // Объявление адреса для реквест запроса
             var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpRequest.Method = "GET";
