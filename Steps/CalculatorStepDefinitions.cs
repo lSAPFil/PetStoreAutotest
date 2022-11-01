@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+//библиотека для сравнения json
+
 
 namespace SpecFlowProject_PetStore.Steps
 {

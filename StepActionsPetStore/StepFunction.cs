@@ -48,7 +48,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             }
 
             CheckActionResult("Удаление прошло успешно", "Ошибка.\n Возможные причины:\nДанные о питомце не были удалены\nБыли неверно введены данные",
-            CheckInfo.FindPetInfo(petId), 404);
+            CheckInfo.FindPetInfo(petId), 405);
         }
 
         // Обновление данных о питомце
@@ -106,6 +106,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             } 
         }
 
+        // Добавить проверку данных в Hooks
         // Найти информацию о питомце по ID
         public static int FindPetInfo(string json, int petId)
         {
@@ -122,6 +123,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             using var reader = new StreamReader(webStream);
             var data = reader.ReadToEnd();
+
+            // Сравнение как объекты (возможна перестановка переменных)
 
             if (json == data)
             {
