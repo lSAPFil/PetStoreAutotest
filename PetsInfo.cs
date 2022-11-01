@@ -12,7 +12,7 @@ namespace SpecFlowProject_PetStore
 {
     public class PetsInfo
     {
-       [JsonProperty("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
         [JsonProperty("category")]
