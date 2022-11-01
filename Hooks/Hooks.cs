@@ -13,20 +13,29 @@ namespace SpecFlowProject_PetStore
     class Hooks
     {
         public CalculatorStepDefinitions.Calculator calculator = new();
-        // before
-        // after
-        // start step
-        // finish step
+        
         [Before]
         public static void BeforeScenario()
         {
-            Console.WriteLine("Запуск сценария: " + TestContext.CurrentContext.Test.Name);
+            Console.WriteLine("Запуск сценария: " + TestContext.CurrentContext.Test.Name+"\n");
+        }
+
+        [BeforeStep]
+        public static void BeforeStep()
+        {
+            Console.WriteLine("----------------------------------");
+        }
+
+        [AfterStep]
+        public static void AfterStep()
+        {
+            Console.WriteLine("\n");
         }
 
         [After]
         public static void AfterScenario()
         {
-            Console.WriteLine("Тест завершился "+ DateTime.Now.ToString());
+            Console.WriteLine("Тест завершился: "+ DateTime.Now.ToString());
         }
     }
 }

@@ -128,7 +128,7 @@ namespace SpecFlowProject_PetStore.Features
                     "id211022233"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Создать_Питомца", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 12
+#line 13
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -148,8 +148,8 @@ namespace SpecFlowProject_PetStore.Features
             else
             {
                 this.ScenarioStart();
-#line 13
-  testRunner.And("Добавить питомца с PetId 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line 14
+  testRunner.And("Добавить питомца с PetId 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -166,7 +166,7 @@ namespace SpecFlowProject_PetStore.Features
                     "id211022234"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Обновить_Данные_О_Питомце", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 16
+#line 17
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -186,10 +186,10 @@ namespace SpecFlowProject_PetStore.Features
             else
             {
                 this.ScenarioStart();
-#line 18
+#line 19
   testRunner.And("Добавить питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
-#line 20
+#line 21
   testRunner.And("Обновить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
@@ -197,17 +197,17 @@ namespace SpecFlowProject_PetStore.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Удалить_Данные_О_Питомце")]
+        [NUnit.Framework.DescriptionAttribute("Удалить_Данные_О_Питомце_По_ID")]
         [NUnit.Framework.CategoryAttribute("all")]
         [NUnit.Framework.CategoryAttribute("id211022231")]
-        public virtual void Удалить_Данные_О_Питомце()
+        public virtual void Удалить_Данные_О_Питомце_По_ID()
         {
             string[] tagsOfScenario = new string[] {
                     "all",
                     "id211022231"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Удалить_Данные_О_Питомце", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 23
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Удалить_Данные_О_Питомце_По_ID", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 24
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -227,11 +227,11 @@ namespace SpecFlowProject_PetStore.Features
             else
             {
                 this.ScenarioStart();
-#line 25
-  testRunner.And("Добавить питомца с PetId 4", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line 26
+  testRunner.And("Добавить питомца с PetId 6", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
-#line 27
-  testRunner.And("Удалить данные питомца с PetId 4", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line 28
+  testRunner.And("Удалить данные питомца с PetId 6", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
             this.ScenarioCleanup();

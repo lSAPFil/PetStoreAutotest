@@ -25,7 +25,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             const string chars = "[]:;<>,./?|!@#$%^&*()_+=-"+
                 "qwertyuiopasdfghjklzxcvbnm"+
                 "QWERTYUIOPASDFGHJKLZXCVBNM"+
-                "йцукенгшщзхъфывапролджэячсмитьбю"+
+                "йцукёенгшщзхъфывапролджэячсмитьбю"+
                 "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"+
                 "0123456789" +
                 "  ~       ";

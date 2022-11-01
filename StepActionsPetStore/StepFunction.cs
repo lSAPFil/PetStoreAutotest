@@ -5,15 +5,15 @@ using System.Net;
 using Newtonsoft.Json;
 
 using static SpecFlowProject_PetStore.StepActionsPetStore.CheckInfo;
-using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
     public sealed class StepFunction
     {
+        // Ввод данных о питомце для отправки запроса на сервис
         PetsInfo petInfo = new()
         {
-            Id = 2,
+            Id = 0,
             Category = new Category { Id = random.Next(10), Name = RandomString(random.Next(10)) },
             Name = RandomString(random.Next(10)),
             PhotoUrls = new List<string>() { RandomString(random.Next(10)) },
@@ -21,6 +21,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             Status = RandomString(random.Next(10))
         };
 
+        // Добавление нового питомца
         public void AddPetID(int petId)
         {
             petInfo.Id = petId;
@@ -30,17 +31,27 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             DeclareRequestSettings("/pet", "POST", json);
 
-            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой", CheckInfo.FindPetInfo(Convert.ToInt32(petInfo.Id)), 200);
+            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой",
+                CheckInfo.FindPetInfo(petId), 200);
         }
 
-        public void DeletePetInfo(int petId)
+        // Удаление существующего питомца
+        public void DeletePetInfo(int? petId)
         {
+            if (petId == null)
+            {
+                DeclareRequestSettings("/pet/", "DELETE");
+            }
+            else
+            {
+                DeclareRequestSettings("/pet/" + Convert.ToInt32(petId), "DELETE");
+            }
 
-            DeclareRequestSettings("/pet/" + petId, "DELETE");
-
-            CheckActionResult("Удаление прошло успешно", "Данные о питомце не были удалены", CheckInfo.FindPetInfo(petId), 404);
+            CheckActionResult("Удаление прошло успешно", "Ошибка.\n Возможные причины:\nДанные о питомце не были удалены\nБыли неверно введены данные",
+            CheckInfo.FindPetInfo(petId), 405);
         }
 
+        // Обновление данных о питомце
         public void UpdatePetInfo(int petId)
         {
             petInfo.Id = petId;
@@ -48,12 +59,25 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
 
-            DeclareRequestSettings("/pet", "PUT", json);
+            if (CheckInfo.FindPetInfo(petId) == 404)
+            {
+                DeclareRequestSettings("/pet", "PUT", json);
 
-            // Проверка, что данные обновлены успешно
-            FindPetInfo(json, petId);
+                // Проверка что данные не были обновлены
+                CheckActionResult("Успех! Обновление несуществующего питомца невозможно", "Ошибка: Был обновлен несуществующий питомец",
+                CheckInfo.FindPetInfo(petId), 404);
+            }
+            else
+            {
+                DeclareRequestSettings("/pet", "PUT", json);
+
+                // Проверка, что данные обновлены успешно
+                CheckActionResult("Обновление прошло успешно", "Ошибка: Обновить данные несуществующего питомца невозможно",
+                CheckInfo.FindPetInfo(petId), 200);
+            }
         }
 
+        // Найти данные о питомцах с определенным статусом
         public void FindByStatus(string status)
         {
             var statusCode = DeclareRequestSettings("/pet/findByStatus?status=" + status, "GET");
@@ -81,6 +105,9 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
                 }
             } 
         }
+
+        // Добавить проверку данных в Hooks
+        // Найти информацию о питомце по ID
         public static int FindPetInfo(string json, int petId)
         {
             Uri uri = new Uri(url + "/pet/" + petId);
@@ -96,6 +123,8 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             using var reader = new StreamReader(webStream);
             var data = reader.ReadToEnd();
+
+            // Сравнение как объекты (возможна перестановка переменных)
 
             if (json == data)
             {

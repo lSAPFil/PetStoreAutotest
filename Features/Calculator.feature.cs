@@ -105,6 +105,12 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
  testRunner.And("Число для операции сложения равно 5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
+#line 8
+ testRunner.And("Число для операции сложения равно 9", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
+#line 9
+ testRunner.And("Сложить все числа", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
