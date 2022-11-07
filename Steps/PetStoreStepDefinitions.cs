@@ -27,7 +27,7 @@ namespace SpecFlowProject_PetStore.Steps
         [Given(@"Найти питомца по PetId (.*) и создать нового в случае неудачи")]
         public void StepFindPetById(int petId)
         {
-            if (FindPetInfo(petId) != 200)
+            if (FindPetInfoGetResponse(petId) != 200)
             {
                 StepAddPetID(petId);
             }
@@ -65,13 +65,13 @@ namespace SpecFlowProject_PetStore.Steps
         public void StepFindById(int id)
         {
 
-            if (FindPetInfo(id) == 200)
+            if (FindPetInfoGetResponse(id) == 200)
             {
                 throw new Exception("Данный питомец существует!");
             }
             else
             {
-                Console.WriteLine($"Несуществующий питомец не был найден\n Код статуса: {FindPetInfo(id)}");
+                Console.WriteLine($"Несуществующий питомец не был найден\n Код статуса: {FindPetInfoGetResponse(id)}");
             }
         }
     }

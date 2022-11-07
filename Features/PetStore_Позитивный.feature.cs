@@ -187,7 +187,7 @@ namespace SpecFlowProject_PetStore.Features
             {
                 this.ScenarioStart();
 #line 19
-  testRunner.And("Добавить питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+  testRunner.And("Найти питомца по PetId 2 и создать нового в случае неудачи", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
 #line 21
   testRunner.And("Обновить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
