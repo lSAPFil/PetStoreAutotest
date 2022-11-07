@@ -32,7 +32,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             DeclareRequestSettings("/pet", "POST", json);
 
             CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой",
-                CheckInfo.FindPetInfo(petId), 200);
+            CheckInfo.FindPetInfoGetResponse(petId), 200);
         }
 
         // Удаление существующего питомца
@@ -48,24 +48,27 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             }
 
             CheckActionResult("Удаление прошло успешно", "Ошибка.\n Возможные причины:\nДанные о питомце не были удалены\nБыли неверно введены данные",
-            CheckInfo.FindPetInfo(petId), 405);
+            CheckInfo.FindPetInfoGetResponse(petId), 405);
         }
 
         // Обновление данных о питомце
         public void UpdatePetInfo(int petId)
         {
             petInfo.Id = petId;
-
+            
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
 
-            if (CheckInfo.FindPetInfo(petId) == 404)
+            // Старая информация о питомце
+            var data = CheckInfo.FindPetInfo(petId);
+                        
+            if (CheckInfo.FindPetInfoGetResponse(petId) == 404)
             {
                 DeclareRequestSettings("/pet", "PUT", json);
 
                 // Проверка что данные не были обновлены
                 CheckActionResult("Успех! Обновление несуществующего питомца невозможно", "Ошибка: Был обновлен несуществующий питомец",
-                CheckInfo.FindPetInfo(petId), 404);
+                CheckInfo.FindPetInfo(data, petId), 404);
             }
             else
             {
@@ -73,7 +76,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
                 // Проверка, что данные обновлены успешно
                 CheckActionResult("Обновление прошло успешно", "Ошибка: Обновить данные несуществующего питомца невозможно",
-                CheckInfo.FindPetInfo(petId), 200);
+                CheckInfo.FindPetInfo(data, petId), 200);
             }
         }
 
@@ -104,38 +107,6 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
                     throw new Exception($"Неизвестный статус:{status}\nОжидался один из:\n- sold\n= pending\n- available");
                 }
             } 
-        }
-
-        // Добавить проверку данных в Hooks
-        // Найти информацию о питомце по ID
-        public static int FindPetInfo(string json, int petId)
-        {
-            Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление реквеста. Эндпоинт /user
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            // Сравнение как объекты (возможна перестановка переменных)
-
-            if (json == data)
-            {
-                Console.WriteLine("Обновление прошло успешно!");
-            }
-            else
-            {
-                throw new Exception("Данные о питомце не были обновлены");
-            }
-
-            return (int)httpResponse.StatusCode;
-        }
+        }       
     }
 }

@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 // Класс для логирования результатов теста в файл
 using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
+using Newtonsoft.Json;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
@@ -130,7 +131,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         }
 
         // Получение информации о найденном питомце (код ответа)
-        public static int FindPetInfo(int? petId)
+        public static int FindPetInfoGetResponse(int? petId)
         {
             Uri uri = new Uri(url + "/pet/" + petId);
             // Объявление адреса для реквест запроса
@@ -145,6 +146,55 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
 
             using var reader = new StreamReader(webStream);
             var data = reader.ReadToEnd();
+
+            return (int)httpResponse.StatusCode;
+        }
+
+        // Получение информации о найденном питомце
+        public static string FindPetInfo(int? petId)
+        {
+            Uri uri = new Uri(url + "/pet/" + petId);
+            // Объявление адреса для реквест запроса
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            httpRequest.Method = "GET";
+
+            // Получаем ответ от сервера
+            GetHttpResponse(httpRequest);
+
+            using var webStream = httpResponse.GetResponseStream();
+
+            using var reader = new StreamReader(webStream);
+            var data = reader.ReadToEnd();
+
+            return data;
+        }
+
+        // Найти информацию о питомце по ID
+        public static int FindPetInfo(string json, int petId)
+        {
+            Uri uri = new Uri(url + "/pet/" + petId);
+            // Объявление реквеста. Эндпоинт /user
+            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            httpRequest.Method = "GET";
+
+            // Получаем ответ от сервера
+            GetHttpResponse(httpRequest);
+
+            using var webStream = httpResponse.GetResponseStream();
+
+            using var reader = new StreamReader(webStream);
+
+            // Новая информация по измененному питомцу
+            var data = reader.ReadToEnd();
+
+            // Сравнение как объекты (возможна перестановка переменных)
+
+            if (JsonConvert.DeserializeObject(json) == JsonConvert.DeserializeObject(data))
+            {
+                throw new Exception("Данные о питомце не были обновлены");
+            }
 
             return (int)httpResponse.StatusCode;
         }
