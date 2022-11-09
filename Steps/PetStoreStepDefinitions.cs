@@ -55,7 +55,7 @@ namespace SpecFlowProject_PetStore.Steps
             pet.DeletePetInfo(petId);
         }
 
-        [Given(@"Найти питомца по статусу (.*)")]
+        [Given(@"Найти питомца по статусу ""(.*)""")]
         public void StepFindByStatus(string status)
         {
             pet.FindByStatus(status);
