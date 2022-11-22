@@ -15,19 +15,19 @@ namespace SpecFlowProject_PetStore.Steps
         [Given(@"Добавить питомца с PetId (.*)")]
         public void StepAddPetID(int petId)
         {
-            pet.AddPetID(petId);
+            pet.AddPetIDAsync(petId).Wait();
         } 
         
         [Given(@"Добавить питомца ")]
         public void StepAddPetIDAndHeaders(int petId)
         {
-            pet.AddPetID(petId);
+            pet.AddPetIDAsync(petId).Wait();
         }
 
         [Given(@"Найти питомца по PetId (.*) и создать нового в случае неудачи")]
         public void StepFindPetById(int petId)
         {
-            if (FindPetInfoGetResponse(petId) != 200)
+            if ((int)CheckInfo.FindPetInfoAsync(petId).Result.StatusCode != 200)
             {
                 StepAddPetID(petId);
             }
@@ -37,41 +37,41 @@ namespace SpecFlowProject_PetStore.Steps
             }
         }
 
-        [Given(@"Обновить данные питомца с PetId (.*)")]
-        public void StepUpdatePetInfo(int petId)
+        [Given(@"Обновить данные питомца с PetId ""(.*)"" ожидаемый результат ""(.*)""")]
+        public void StepUpdatePetInfo(int petId, int httpCode=200)
         {
-            pet.UpdatePetInfo(petId);
+            pet.UpdatePetInfoAsync(petId, httpCode).Wait();
         }
 
         [Given(@"Удалить данные питомца без PetId")]
         public void StepDeleteWithoutID()
         {
-            pet.DeletePetInfo(null);
+            pet.DeletePetInfoAsync(null, 405).Wait();
         }
 
         [Given(@"Удалить данные питомца с PetId (.*)")]
         public void StepDeletePetInfo(int petId)
         {
-            pet.DeletePetInfo(petId);
+            pet.DeletePetInfoAsync(petId).Wait();
         }
 
         [Given(@"Найти питомца по статусу ""(.*)""")]
         public void StepFindByStatus(string status)
         {
-            pet.FindByStatus(status);
+            pet.FindByStatusAsync(status).Wait();
         }
 
         [Given(@"Найти питомца по id (.*)")]
         public void StepFindById(int id)
         {
 
-            if (FindPetInfoGetResponse(id) == 200)
+            if ((int)CheckInfo.FindPetInfoAsync(id).Result.StatusCode == 200)
             {
                 throw new Exception("Данный питомец существует!");
             }
             else
             {
-                Console.WriteLine($"Несуществующий питомец не был найден\n Код статуса: {FindPetInfoGetResponse(id)}");
+                Console.WriteLine($"Несуществующий питомец не был найден\n Код статуса: { (int)CheckInfo.FindPetInfoAsync(id).Result.StatusCode}");
             }
         }
     }

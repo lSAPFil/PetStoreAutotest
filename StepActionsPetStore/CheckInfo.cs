@@ -8,6 +8,12 @@ using NUnit.Framework;
 // Класс для логирования результатов теста в файл
 using static SpecFlowProject_PetStore.StepActionsPetStore.LogWriter;
 using Newtonsoft.Json;
+using FluentAssertions;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Collections.Generic;
 
 namespace SpecFlowProject_PetStore.StepActionsPetStore
 {
@@ -54,7 +60,7 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         }
 
         // Получение ответа сервера
-        public static void GetHttpResponse(HttpWebRequest httpRequest)
+        public void GetHttpResponse(HttpWebRequest httpRequest)
         {
             // Избавляемся от остановки программы из-за негативного кода ответа
             try
@@ -67,136 +73,82 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
             }
         }
 
-        // Отправка запроса с пользовательскими параметрами
-        public static int DeclareRequestSettings(string endPoint, string methodName)
+        // Отправка запроса с пользовательскими данными 
+        public static async Task<HttpResponseMessage> SendingRequestGetAsync(string endPoint)
         {
-            Uri uri = new Uri(url + endPoint);
-            // Объявление адреса для реквест запроса
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = methodName;
-
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-            
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            Console.WriteLine(data);
-            Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
-
-            return (int)httpResponse.StatusCode;
-        }
-
-        // Отправка запроса с пользовательскими данными в json формате
-        public static void DeclareRequestSettings(string endPoint, string methodName, string json)
-        {
-            Uri uri = new Uri(url + endPoint);
-            // Объявление адреса для реквест запроса
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = methodName;
+            Uri uri = new Uri(url+endPoint);
+            using var client = new HttpClient();
 
             // Задаем type данных для отправки
-            httpRequest.ContentType = "application/json";
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            // Получаем поток для отправки данных на сервер
-            using (var requestStream = httpRequest.GetRequestStream())
+            var result = await client.GetAsync(uri);
 
-            // Отправляем данные на сервер
-            using (var writer = new StreamWriter(requestStream))
-            {
-                writer.Write(json);
-            }
+            Console.WriteLine(result.StatusCode);
 
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-
-            // Получаем поток для чтения ответа сервера
-            using (var responseStream = httpResponse.GetResponseStream())
-
-            // Читаем ответ сервера 
-            using (var reader = new StreamReader(responseStream))
-            {
-                var response = reader.ReadToEnd();
-
-                // Вывод ответа сервера
-                Console.WriteLine(response);
-
-                // Вывод полученного кода статуса
-                Console.WriteLine("Код статуса: " + (int)httpResponse.StatusCode);
-            }
+            return result;
         }
 
-        // Получение информации о найденном питомце (код ответа)
-        public static int FindPetInfoGetResponse(int? petId)
+        public static async Task<HttpResponseMessage> SendingRequestPostAsync(string endPoint, string json)
         {
-            Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление адреса для реквест запроса
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
+            Uri uri = new Uri(url + endPoint);
+            using var client = new HttpClient();
 
-            httpRequest.Method = "GET";
+            var result = await client.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"));
 
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
+            Console.WriteLine(result.StatusCode);
 
-            using var webStream = httpResponse.GetResponseStream();
+            return result;
+        }
 
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
+        public static async Task<HttpResponseMessage> SendingRequestPutAsync(string endPoint, string json)
+        {
+            using var client = new HttpClient();
+            Uri uri = new Uri(url + endPoint);
+            var result = await client.PutAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"));
 
-            return (int)httpResponse.StatusCode;
+            Console.WriteLine(result.StatusCode);
+
+            return result;
+        }
+
+
+        public static async Task<HttpResponseMessage> SendingRequestDeleteAsync(string endPoint)
+        {
+            using var client = new HttpClient();
+            Uri uri = new Uri(url + endPoint);
+            var result = await client.DeleteAsync(uri);
+
+            Console.WriteLine(result.StatusCode);
+
+            return result;
         }
 
         // Получение информации о найденном питомце
-        public static string FindPetInfo(int? petId)
+        public static async Task<HttpResponseMessage> FindPetInfoAsync(int? petId)
         {
-            Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление адреса для реквест запроса
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-
-            return data;
+            return await SendingRequestGetAsync("/pet/" + petId);
+           
         }
 
         // Найти информацию о питомце по ID
-        public static int FindPetInfo(string json, int petId)
+        public static async Task<HttpResponseMessage> FindPetInfoAsync(string json, int petId)
         {
-            Uri uri = new Uri(url + "/pet/" + petId);
-            // Объявление реквеста. Эндпоинт /user
-            var httpRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpRequest.Method = "GET";
-
-            // Получаем ответ от сервера
-            GetHttpResponse(httpRequest);
-
-            using var webStream = httpResponse.GetResponseStream();
-
-            using var reader = new StreamReader(webStream);
-
-            // Новая информация по измененному питомцу
-            var data = reader.ReadToEnd();
+            // Получаем информацию по питомцу с сервисла
+            var data = await (await SendingRequestGetAsync("/pet/" + petId)).Content.ReadAsStringAsync();
 
             // Сравнение как объекты (возможна перестановка переменных)
 
-            if (JsonConvert.DeserializeObject(json) == JsonConvert.DeserializeObject(data))
-            {
-                throw new Exception("Данные о питомце не были обновлены");
-            }
+            // Новая отправленная информация по питомцу
+            var expected = JsonConvert.DeserializeObject(json);
 
-            return (int)httpResponse.StatusCode;
+            // Полученная новая информация по питомцу
+            var actual = JsonConvert.DeserializeObject(data);
+
+            // Сравнение json по питомцу отправленного и полученного от сервиса
+            actual.Should().BeEquivalentTo(expected, "Данные о питомце не были обновлены");
+
+            return await SendingRequestGetAsync("/pet/" + petId);
         }
     }
 }

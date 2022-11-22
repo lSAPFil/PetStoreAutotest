@@ -191,13 +191,13 @@ namespace SpecFlowProject_PetStore.Features
             {
                 this.ScenarioStart();
 #line 19
-  testRunner.And("Найти питомца по PetId 2 и создать нового в случае неудачи", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+  testRunner.And("Найти питомца по PetId 7 и создать нового в случае неудачи", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
 #line 21
-  testRunner.And("Удалить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+  testRunner.And("Удалить данные питомца с PetId 7", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
 #line 23
-  testRunner.And("Обновить данные питомца с PetId 2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
+  testRunner.And("Обновить данные питомца с PetId \"2\" ожидаемый результат \"404\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "* ");
 #line hidden
             }
             this.ScenarioCleanup();

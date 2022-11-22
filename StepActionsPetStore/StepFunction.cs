@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using static SpecFlowProject_PetStore.StepActionsPetStore.CheckInfo;
@@ -22,89 +23,77 @@ namespace SpecFlowProject_PetStore.StepActionsPetStore
         };
 
         // Добавление нового питомца
-        public void AddPetID(int petId)
+        public async Task AddPetIDAsync(int petId)
         {
             petInfo.Id = petId;
 
             // Конвертирование данных пользователя в JSON для отправки на POST
             var json = JsonConvert.SerializeObject(petInfo);
 
-            DeclareRequestSettings("/pet", "POST", json);
+            var response = await (await SendingRequestPostAsync("/pet", json)).Content.ReadAsStringAsync();
 
-            CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой",
-            CheckInfo.FindPetInfoGetResponse(petId), 200);
+            //CheckActionResult("Питомец был успешно добавлен", "Добавление питомца завершилось ошибкой",
+            //    (int)CheckInfo.FindPetInfoAsync(petId).Result.StatusCode, 200);
+            //Console.WriteLine(response);
         }
 
         // Удаление существующего питомца
-        public void DeletePetInfo(int? petId)
+        public async Task DeletePetInfoAsync(int? petId, int httpCode = 404)
         {
             if (petId == null)
             {
-                DeclareRequestSettings("/pet/", "DELETE");
+               await SendingRequestDeleteAsync("/pet/");
             }
             else
             {
-                DeclareRequestSettings("/pet/" + Convert.ToInt32(petId), "DELETE");
+                await SendingRequestDeleteAsync("/pet/" + Convert.ToInt32(petId));
             }
 
-            CheckActionResult("Удаление прошло успешно", "Ошибка.\n Возможные причины:\nДанные о питомце не были удалены\nБыли неверно введены данные",
-            CheckInfo.FindPetInfoGetResponse(petId), 405);
+            CheckActionResult("Успех!", $"Ошибка: Ожидалось:{httpCode}, Вернулся:{(int)CheckInfo.FindPetInfoAsync(petId).Result.StatusCode}",
+                (int)CheckInfo.FindPetInfoAsync(petId).Result.StatusCode, httpCode);
         }
 
         // Обновление данных о питомце
-        public void UpdatePetInfo(int petId)
+        public async Task UpdatePetInfoAsync(int petId, int httpCode)
         {
             petInfo.Id = petId;
             
             // Конвертирование данных пользователя в JSON для отправки на POST
-            var json = JsonConvert.SerializeObject(petInfo);
+            var json  = (await SendingRequestPutAsync("/pet", JsonConvert.SerializeObject(petInfo))).Content.ReadAsStringAsync();
+            var petBefore = await CheckInfo.FindPetInfoAsync(petId);
+            var petAfter = await CheckInfo.FindPetInfoAsync(await json, petId);
 
-            // Старая информация о питомце
-            var data = CheckInfo.FindPetInfo(petId);
-                        
-            if (CheckInfo.FindPetInfoGetResponse(petId) == 404)
-            {
-                DeclareRequestSettings("/pet", "PUT", json);
-
-                // Проверка что данные не были обновлены
-                CheckActionResult("Успех! Обновление несуществующего питомца невозможно", "Ошибка: Был обновлен несуществующий питомец",
-                CheckInfo.FindPetInfo(data, petId), 404);
-            }
-            else
-            {
-                DeclareRequestSettings("/pet", "PUT", json);
-
-                // Проверка, что данные обновлены успешно
-                CheckActionResult("Обновление прошло успешно", "Ошибка: Обновить данные несуществующего питомца невозможно",
-                CheckInfo.FindPetInfo(data, petId), 200);
-            }
+            // Проверка что данные не были обновлены
+            CheckActionResult("Успех!", $"Ошибка: Ожидалось:{httpCode}, Вернулся:{(int)petAfter.StatusCode}",
+                (int)petAfter.StatusCode, httpCode);
         }
 
         // Найти данные о питомцах с определенным статусом
-        public void FindByStatus(string status)
+        public async Task FindByStatusAsync(string status)
         {
-            var statusCode = DeclareRequestSettings("/pet/findByStatus?status=" + status, "GET");
+
+            var statusCode = (await SendingRequestGetAsync("/pet/findByStatus?status=" + status)).StatusCode;
 
             if (status =="sold" || status == "pending" || status == "available")
             {
-                if (statusCode == 200)
+                if ((int)statusCode == 200)
                 {
                     Console.WriteLine("Питомец со статусом найден");
                 }
                 else
                 {
-                    throw new Exception($"Питомец со статусом {status} отсутсвует.\nКод статуса: {statusCode}");
+                    throw new Exception($"Питомец со статусом {status} отсутсвует.\nКод статуса: {(int)statusCode}");
                 }
             }
             else
             {
-                if (statusCode == 200)
+                if (statusCode == HttpStatusCode.OK )
                 {
-                    throw new Exception($"Питомец со статусом {status} отсутсвует.\nНеверный код статуса: {statusCode}\nОжидалось: 404");
+                    throw new Exception($"Питомец со статусом {status} отсутсвует.\nНеверный код статуса: {(int)statusCode}\nОжидалось: 404");
                 }
                 else
                 {
-                    throw new Exception($"Неизвестный статус:{status}\nОжидался один из:\n- sold\n= pending\n- available");
+                    throw new Exception($"Неизвестный статус:{status}\nОжидался один из:\n- sold\n- pending\n- available");
                 }
             } 
         }       
